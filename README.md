@@ -34,3 +34,5 @@
 ```bash
 git clone https://github.com/xiqudtt/Test-task.git
 cd Weather-client
+docker-compose up --build
+
