@@ -27,10 +27,10 @@
 ---
 
 ## ⚙️ Установка и запуск
-
-1. Клонировать репозиторий:
 ```bash
 git clone https://github.com/xiqudtt/Test-task.git
 cd Weather-client
-docker-compose up --build
+npm i
+npm run dev
+
 
