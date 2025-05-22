@@ -22,9 +22,7 @@
 
 **Стек:**
 - Frontend: React 18, Redux Toolkit
-- Backend: Node.js, Express
-- База данных: MongoDB (если используется)
-- Стилизация: CSS Modules/SASS
+- Стилизация: ChakraUI
 
 ---
 
