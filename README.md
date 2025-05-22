@@ -30,7 +30,6 @@
 ```bash
 git clone https://github.com/xiqudtt/Test-task.git
 cd Weather-client
-npm i
-npm run dev
+docker-compose up --build
 
 
