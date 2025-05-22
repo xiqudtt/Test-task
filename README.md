@@ -21,7 +21,7 @@
 ![Git](https://img.shields.io/badge/-Git-F05032?logo=git&logoColor=white)
 
 **Стек:**
-- Frontend: React 18, Redux Toolkit
+- Frontend: React 18, Axios, React-router-dom
 - Стилизация: ChakraUI
 
 ---
