@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  weather-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://localhost
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped 
