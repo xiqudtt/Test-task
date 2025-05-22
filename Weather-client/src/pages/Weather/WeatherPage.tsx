@@ -31,6 +31,16 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+// Отключаем Service Worker в режиме разработки
+if (process.env.NODE_ENV === 'development' && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister();
+      console.log('Service Worker отключен');
+    });
+  });
+}
+
 const MOSCOW_COORDINATES = {
   lat: 55.7558,
   lon: 37.6173
@@ -42,8 +52,30 @@ const WEATHER_API_CONFIG = {
 };
 
 const weatherApi = axios.create({
-  baseURL: WEATHER_API_CONFIG.baseURL
+  baseURL: WEATHER_API_CONFIG.baseURL,
+  timeout: 15000,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
 });
+
+weatherApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error);
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('Превышено время ожидания запроса');
+    }
+    if (error.response) {
+      throw new Error(error.response.data.message || 'Ошибка при получении данных о погоде');
+    }
+    if (error.request) {
+      throw new Error('Сервер не отвечает. Проверьте подключение к интернету');
+    }
+    throw new Error('Произошла ошибка при выполнении запроса');
+  }
+);
 
 interface WeatherData {
   coord: {
@@ -145,26 +177,44 @@ const WeatherPage: React.FC = () => {
           lang: 'ru'
         });
 
-        const response = await weatherApi.get<WeatherApiResponse>('/weather', { params });
+        if (!WEATHER_API_CONFIG.apiKey) {
+          throw new Error('API ключ не настроен');
+        }
+
+        const response = await weatherApi.get<WeatherApiResponse>('/weather', { 
+          params,
+          validateStatus: (status) => status === 200 // Принимаем только успешные ответы
+        });
+
         const data = response.data;
         
+        if (!data || typeof data !== 'object') {
+          throw new Error('Получен некорректный ответ от сервера');
+        }
+
         if (isErrorResponse(data)) {
-          throw new Error(data.message);
+          throw new Error(data.message || 'Ошибка при получении данных о погоде');
         }
 
         setWeather(data);
       } catch (err: any) {
         console.error('Ошибка при получении погоды:', err);
-        console.error('Детали ошибки:', {
-          status: err.response?.status,
-          statusText: err.response?.statusText,
-          data: err.response?.data,
-          config: {
-            url: err.config?.url,
-            params: err.config?.params
+        let errorMessage = 'Не удалось загрузить данные о погоде';
+
+        if (axios.isAxiosError(err)) {
+          if (err.code === 'ECONNABORTED') {
+            errorMessage = 'Превышено время ожидания запроса';
+          } else if (!err.response) {
+            errorMessage = 'Нет соединения с сервером. Проверьте подключение к интернету';
+          } else if (err.response.status === 401) {
+            errorMessage = 'Неверный API ключ';
+          } else if (err.response.status === 429) {
+            errorMessage = 'Превышен лимит запросов к API';
+          } else {
+            errorMessage = err.response.data?.message || err.message || errorMessage;
           }
-        });
-        const errorMessage = err.response?.data?.message || err.message || 'Не удалось загрузить данные о погоде';
+        }
+
         setError(errorMessage);
         toast({
           title: 'Ошибка',
@@ -179,9 +229,7 @@ const WeatherPage: React.FC = () => {
     };
 
     fetchWeather();
-
     const interval = setInterval(fetchWeather, 60 * 1000);
-
     return () => clearInterval(interval);
   }, [toast]);
 

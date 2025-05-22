@@ -5,7 +5,6 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthPage from './pages/Auth/AuthPage';
 import WeatherPage from './pages/Weather/WeatherPage';
-import './App.css';
 
 const App: React.FC = () => {
   return (
