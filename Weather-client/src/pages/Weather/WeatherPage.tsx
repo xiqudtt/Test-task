@@ -31,19 +31,16 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-// Координаты Москвы
 const MOSCOW_COORDINATES = {
   lat: 55.7558,
   lon: 37.6173
 };
 
-// Конфигурация API
 const WEATHER_API_CONFIG = {
   baseURL: 'https://api.openweathermap.org/data/2.5',
   apiKey: 'f4ba6a6428a7ff65cb2b95f0d28ac29d'
 };
 
-// Создаем экземпляр axios для погодного API
 const weatherApi = axios.create({
   baseURL: WEATHER_API_CONFIG.baseURL
 });
@@ -183,7 +180,6 @@ const WeatherPage: React.FC = () => {
 
     fetchWeather();
 
-    // Обновляем погоду каждую минуту
     const interval = setInterval(fetchWeather, 60 * 1000);
 
     return () => clearInterval(interval);
@@ -194,14 +190,12 @@ const WeatherPage: React.FC = () => {
     navigate('/auth');
   };
 
-  // Добавляем анимацию для иконки погоды
   const bounce = keyframes`
     0% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0); }
   `;
 
-  // Цвета и стили
   const cardBg = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue('gray.800', 'white');
 
@@ -372,7 +366,6 @@ const WeatherPage: React.FC = () => {
                 </Box>
               </GridItem>
 
-              {/* Параметры погоды */}
               <GridItem>
                 <Box
                   p={6}
@@ -413,7 +406,6 @@ const WeatherPage: React.FC = () => {
                 </Box>
               </GridItem>
 
-              {/* Дополнительная информация */}
               <GridItem colSpan={{ base: 1, lg: 2 }}>
                 <Box
                   p={{ base: 4, md: 6 }}
@@ -456,7 +448,6 @@ const WeatherPage: React.FC = () => {
                 </Box>
               </GridItem>
 
-              {/* Давление и осадки */}
               <GridItem colSpan={{ base: 1, lg: 2 }}>
                 <Box
                   p={{ base: 4, md: 6 }}

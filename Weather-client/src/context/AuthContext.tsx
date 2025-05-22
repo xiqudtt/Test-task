@@ -30,15 +30,12 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    // Проверяем наличие токена при инициализации
     return !!localStorage.getItem('token');
   });
 
-  // Проверяем токен при загрузке
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Можно добавить проверку валидности токена здесь
       setIsAuthenticated(true);
     }
   }, []);
@@ -112,9 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
-    // Очищаем все данные сессии
     sessionStorage.clear();
-    // Очищаем все куки, связанные с доменом
     document.cookie.split(";").forEach((c) => {
       document.cookie = c
         .replace(/^ +/, "")

@@ -10,7 +10,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    // Редирект на страницу авторизации с сохранением пути, откуда пришли
     return <Navigate to="/auth" replace state={{ from: location }} />;
   }
 

@@ -39,18 +39,15 @@ const AuthPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  // Адаптивные значения
   const containerWidth = useBreakpointValue({ base: '100%', md: '450px' });
   const headerSize = useBreakpointValue({ base: 'xl', md: '2xl' });
 
-  // Цвета и стили
   const cardBg = useColorModeValue('white', 'gray.800');
   const inputBg = useColorModeValue('gray.50', 'gray.700');
   const textColor = useColorModeValue('gray.800', 'white');
   const mutedColor = useColorModeValue('gray.600', 'gray.400');
   const highlightColor = useColorModeValue('purple.500', 'purple.300');
 
-  // Анимации
   const formAnimation = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -130,7 +127,6 @@ const AuthPage: React.FC = () => {
       position="relative"
       overflow="hidden"
     >
-      {/* Декоративные элементы на фоне */}
       <MotionBox
         initial="initial"
         animate="animate"
@@ -195,7 +191,6 @@ const AuthPage: React.FC = () => {
                       : 'Присоединяйтесь к нам для доступа к прогнозу погоды'}
                   </Text>
                   
-                  {/* Добавляем информацию о тестовых данных */}
                   <Box 
                     p={4} 
                     bg={useColorModeValue('blue.50', 'blue.900')} 

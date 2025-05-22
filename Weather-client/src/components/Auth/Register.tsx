@@ -16,8 +16,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
-  const [email, setEmail] = useState('eve.holt@reqres.in'); // Предзаполняем тестовым email
-  const [password, setPassword] = useState('pistol'); // Предзаполняем тестовым паролем
+  const [email, setEmail] = useState('eve.holt@reqres.in'); 
+  const [password, setPassword] = useState('pistol');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const { register } = useAuth();
